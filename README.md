@@ -22,3 +22,10 @@ The main trade-off: this library normalises the removed vowels `a`, `i`, `l`, `o
 - `decode` accepts uppercase and the four removed vowels; `encode` always emits lowercase canonical characters.
 - Precision is capped at 12 characters. Beyond that, the longitude cell width drops below ~1 cm and double precision stops being meaningful.
 - The poles (lat ±90) and the antimeridian (lon ±180) are valid inputs; cells touching them have asymmetric error bounds.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
